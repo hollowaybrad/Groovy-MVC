@@ -1,0 +1,10 @@
+
+public interface ${model}Service {
+
+	public ${model} save();
+	
+	public ${model} findOne(Integer id);
+	
+	public ${model} findAll();
+
+}

@@ -1,0 +1,102 @@
+package groovyMVC.controllers;
+
+import groovyMVC.utils.SpringPropertyUtils;
+import groovyMVC.validation.ValidationResult;
+import groovyMVC.validation.${model}Validator;
+import groovyMVC.service.${model}Service;
+import groocyMVC.model.${model}
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+
+@Controller
+public class ${model}Controller {
+
+<%
+
+	def modelLowerCase = model.toLowerCase()
+	
+	println "	@Autowired"
+	println "	${model}Service ${modelLowerCase}Service;"
+	println "" 
+
+	
+actions.each {
+
+	if(it == "list"){
+		println "	@RequestMapping(value = \"/${modelLowerCase}/${it}\")"
+		println "	public String $it(Model model, @ModelAttribute(\"AttributeName\") final String message ){"
+		println ""
+		println "		List<${model}> ${modelLowerCase}s = ${modelLowerCase}Service.findAll();"
+		println "		model.addAttribute(\"${modelLowerCase}s\", ${modelLowerCase}s);"
+		println "		return \"${modelLowerCase}/${it}\";"
+	
+	}else if(it == "show" || it == "edit"){
+		println "	@RequestMapping(value = \"/${modelLowerCase}/${it}/{id}\")"
+		println "	public String $it(Model model, @PathVariable(\"id\") Integer id){"
+		println ""
+		println "		model.addAttribute(\"${modelLowerCase}\", ${modelLowerCase}Service.findOne(id));"
+		println "		return \"${modelLowerCase}/${it}\";"
+		
+	}else if(it == "create"){
+		println "	@RequestMapping(value = \"/${modelLowerCase}/${it}\")"
+		println "	public String $it(Model model){"
+		println ""
+		println "		model.addAttribute(\"${modelLowerCase}\", new ${model}());"
+		println "		return \"${modelLowerCase}/${it}\";"
+		
+	}else if(it == "save"){
+		println "	@RequestMapping(value = \"/${modelLowerCase}/${it}\")"
+		println "	public String $it(Model model, ${model} ${modelLowerCase}, RedirectAttributes redirectAttributes){"
+		println ""
+		println "		ValidationResult result = ${modelLowerCase}Validator.validate(${modelLowerCase});"
+		println	""
+		println "		if (result.hasErrors()) {"
+		println "			model.addAttribute(\"errors\", result.getErrors());"
+		println "			model.addAttribute(\"${modelLowerCase}\", ${modelLowerCase});"
+		println "			return \"${modelLowerCase}/create\";"
+		println "		}"
+		println ""
+		println "		${modelLowerCase}Service.save(${modelLowerCase});"
+		println ""
+		println "		redirectAttributes.addFlashAttribute(\"message\", SpringPropertyUtils.getProperty(\"message.${modelLowerCase}.created\"));"
+		println	""
+		println "		return \"${modelLowerCase}/list\";"
+		
+	}else if(it == "update"){
+		println "	@RequestMapping(value = \"/${modelLowerCase}/${it}/{id}\")"
+		println "	public String $it(Model model, ${model} ${modelLowerCase}, @PathVariable(\"id\") Integer id, RedirectAttributes redirectAttributes){"
+		println ""
+		println "		ValidationResult result = ${modelLowerCase}Validator.validate(${modelLowerCase});"
+		println	""
+		println "		if (result.hasErrors()) {"
+		println "			model.addAttribute(\"errors\", result.getErrors());"
+		println "			model.addAttribute(\"${modelLowerCase}\", ${modelLowerCase});"
+		println "			return \"${modelLowerCase}/edit\";"
+		println "		}"
+		println ""
+		println "		${model} current${model} = ${modelLowerCase}Service.findOne(id);"
+		println "		//TODO: Populate model from ${model} parameters"
+		println ""
+		println "		${modelLowerCase}Service.save(${modelLowerCase});"
+		println ""
+		println "		redirectAttributes.addFlashAttribute(\"message\", SpringPropertyUtils.getProperty(\"message.${modelLowerCase}.updated\"));"
+		println	""
+		println "		return \"${modelLowerCase}/list\";"
+	}
+
+println "	}"
+println""
+
+}
+%>
+
+}

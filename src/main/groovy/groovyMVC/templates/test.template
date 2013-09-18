@@ -1,0 +1,7 @@
+
+<%
+	def modelLowerCase = model.toLowerCase()
+	
+		${model}.class
+	
+%>

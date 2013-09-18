@@ -1,0 +1,38 @@
+package groovyMVC.validation;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
+import groovyMVC.model.${model};
+import groovyMVC.validation.FormError;
+import groovyMVC.utils.StringUtils;
+
+@Component
+public class ${model}Validator implements FormValidator {
+
+    public boolean supports(Class<?> clazz) {
+        return ${model}.class.equals(clazz);
+    }
+<%    
+    def modelLowerCase = model.toLowerCase()
+%>
+
+    @Override
+	public ValidationResult validate(Object object) {
+
+    	List<FormError> errors = new ArrayList<FormError>();
+    	ValidationResult result = new ValidationResult(errors);
+
+		${model} ${modelLowerCase} = (${model})object;
+	
+	<%	
+		${model}.metaClass.properties.each {
+		println "	if (StringUtils.empty(${modelLowerCase}.get${it}()))"
+        println "	errors.add(new FormError(\"${it}\", \"errors.${modelLowerCase}.required.${it}\"));"
+		}
+	%>	 
+    	return result;
+	}
+}
