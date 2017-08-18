@@ -1,5 +1,5 @@
 Groovy-MVC
 ==========
 
-Groovy Templates for creating various Spring MVC needs based on conventions. Controllers, Services, Views, Models ....etc
+Groovy Templates for creating various Spring MVC scaffolding based on conventions. Controllers, Services, Views, Models ....etc
 
